@@ -2,297 +2,127 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mivog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIVOG Splash</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;700&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-  background:#000;
-  width:100vw;height:100vh;
-  overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-}
-
-/* ── ARKA PLAN: parçacık yıldız alanı ── */
-.starfield{
-  position:fixed;inset:0;
-  background: radial-gradient(ellipse at 30% 40%, #0d0020 0%, #000 60%);
-}
-.star{
-  position:absolute;border-radius:50%;
-  background:#fff;
-  animation:twinkle var(--d) ease-in-out infinite alternate;
-}
-@keyframes twinkle{
-  from{opacity:var(--a);transform:scale(1);}
-  to{opacity:calc(var(--a)*0.2);transform:scale(0.6);}
-}
-
-/* ── IŞIN HUZME ── */
-.rays{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;
-  animation:raysIn 0.8s ease-out 1.6s forwards;
-}
-@keyframes raysIn{to{opacity:1;}}
-.ray{
-  position:absolute;
-  width:2px;height:60vh;
-  background:linear-gradient(to bottom,transparent,rgba(168,85,247,0.15),transparent);
-  transform-origin:center bottom;
-}
-
-/* ── LOGO KAPSAYICI ── */
-.logo-wrap{
-  position:relative;z-index:10;
-  display:flex;flex-direction:column;align-items:center;gap:0;
-  opacity:0;
-  animation:logoReveal 1s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
-}
-@keyframes logoReveal{
-  from{opacity:0;transform:scale(0.7) translateY(30px);}
-  to{opacity:1;transform:scale(1) translateY(0);}
-}
-
-/* ── M HARFI SVG LOGOSU ── */
-.logo-icon{
-  width:120px;height:120px;
-  position:relative;
-  animation:iconFloat 4s ease-in-out 1.5s infinite;
-}
-@keyframes iconFloat{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-}
-
-.logo-icon svg{
-  width:100%;height:100%;
-  filter: drop-shadow(0 0 30px rgba(168,85,247,0.8))
-          drop-shadow(0 0 60px rgba(168,85,247,0.4));
-}
-
-/* ── MIVOG YAZI ── */
-.logo-text{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:4.5rem;
-  letter-spacing:0.25em;
-  color:transparent;
-  background:linear-gradient(135deg,#fff 0%,#e0b8ff 40%,#a855f7 70%,#7c3aed 100%);
-  -webkit-background-clip:text;background-clip:text;
-  position:relative;
-  margin-top:-8px;
-  animation:textGlow 3s ease-in-out 1.5s infinite alternate;
-}
-@keyframes textGlow{
-  from{filter:drop-shadow(0 0 8px rgba(168,85,247,0.5));}
-  to{filter:drop-shadow(0 0 20px rgba(168,85,247,0.9)) drop-shadow(0 0 40px rgba(124,58,237,0.5));}
-}
-
-/* ── ALTI ÇİZGİ ── */
-.logo-line{
-  width:0;height:2px;
-  background:linear-gradient(90deg,transparent,#a855f7,#7c3aed,transparent);
-  animation:lineGrow 0.8s ease-out 1.2s forwards;
-  box-shadow:0 0 10px #a855f7;
-}
-@keyframes lineGrow{to{width:220px;}}
-
-/* ── SLOGAN ── */
-.logo-sub{
-  font-family:'Outfit',sans-serif;
-  font-size:.7rem;
-  font-weight:300;
-  letter-spacing:.5em;
-  color:rgba(200,160,255,0.6);
+body{background:#0d0500;display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:14px;}
+.splash-tagline{
+  font-family:'Baloo 2',cursive;
+  font-size:.55rem;letter-spacing:.55em;
+  color:rgba(255,120,30,0);
   text-transform:uppercase;
-  margin-top:10px;
-  opacity:0;
-  animation:subIn 0.6s ease-out 2s forwards;
+  transition:color 0.6s ease 0.4s;
 }
-@keyframes subIn{to{opacity:1;}}
-
-/* ── KÖŞE DEKORASYON ── */
-.corner{
-  position:fixed;width:60px;height:60px;
-  opacity:0;
-  animation:cornerIn 0.5s ease-out 2.2s forwards;
-}
-@keyframes cornerIn{to{opacity:0.4;}}
-.corner-tl{top:24px;left:24px;border-top:2px solid #a855f7;border-left:2px solid #a855f7;}
-.corner-tr{top:24px;right:24px;border-top:2px solid #a855f7;border-right:2px solid #a855f7;}
-.corner-bl{bottom:24px;left:24px;border-bottom:2px solid #a855f7;border-left:2px solid #a855f7;}
-.corner-br{bottom:24px;right:24px;border-bottom:2px solid #a855f7;border-right:2px solid #a855f7;}
-
-/* ── SCAN LİNE EFFEKTİ ── */
-.scanline{
-  position:fixed;inset:0;
-  background:repeating-linear-gradient(
-    0deg,
-    transparent,transparent 2px,
-    rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px
-  );
-  pointer-events:none;z-index:100;
-}
-
-/* ── BAŞLAT BUTONU ── */
-.start-btn{
-  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
-  font-family:'Outfit',sans-serif;
-  font-size:.75rem;font-weight:400;
-  letter-spacing:.4em;
-  color:rgba(200,160,255,0.5);
+.phase2 .splash-tagline{color:rgba(255,120,30,0.6);}
+#brickCanvas{image-rendering:pixelated;display:block;}
+#replayBtn{
+  margin-top:20px;
+  font-family:'Baloo 2',cursive;
+  font-size:.8rem;letter-spacing:.2em;
+  color:rgba(255,120,30,0.5);
+  background:none;border:1px solid rgba(255,120,30,0.3);
+  border-radius:20px;padding:6px 20px;cursor:pointer;
   text-transform:uppercase;
-  border:none;background:none;cursor:pointer;
-  opacity:0;
-  animation:btnIn 0.5s ease-out 2.8s forwards, btnPulse 2s ease-in-out 3.3s infinite;
 }
-@keyframes btnIn{to{opacity:1;}}
-@keyframes btnPulse{
-  0%,100%{color:rgba(200,160,255,0.5);}
-  50%{color:rgba(200,160,255,1);}
-}
-
-/* ── GEÇIŞ ── */
-.transition-out{
-  position:fixed;inset:0;z-index:200;
-  background:#000;opacity:0;pointer-events:none;
-}
-.transition-out.active{
-  animation:fadeOut 0.6s ease-in forwards;
-}
-@keyframes fadeOut{to{opacity:1;}}
-
-/* ── VERSİYON ── */
-.version{
-  position:fixed;bottom:24px;right:28px;
-  font-family:'Outfit',sans-serif;
-  font-size:.6rem;letter-spacing:.2em;
-  color:rgba(168,85,247,0.3);
-  opacity:0;animation:subIn 0.5s ease-out 3s forwards;
-}
+#replayBtn:hover{color:rgba(255,120,30,0.9);border-color:rgba(255,120,30,0.7);}
+#wrapper{display:flex;flex-direction:column;align-items:center;gap:14px;}
 </style>
 </head>
 <body>
-
-<div class="starfield" id="starfield"></div>
-
-<!-- Işın huzmeler -->
-<div class="rays" id="rays"></div>
-
-<!-- Scanline overlay -->
-<div class="scanline"></div>
-
-<!-- Köşe dekorlar -->
-<div class="corner corner-tl"></div>
-<div class="corner corner-tr"></div>
-<div class="corner corner-bl"></div>
-<div class="corner corner-br"></div>
-
-<!-- Ana logo -->
-<div class="logo-wrap">
-
-  <!-- M harfi geometric logo -->
-  <div class="logo-icon">
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="g1" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#e0b8ff"/>
-          <stop offset="50%" stop-color="#a855f7"/>
-          <stop offset="100%" stop-color="#7c3aed"/>
-        </linearGradient>
-        <linearGradient id="g2" x1="120" y1="0" x2="0" y2="120" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#a855f7" stop-opacity="0.4"/>
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      <!-- Dış altıgen çerçeve -->
-      <polygon points="60,4 110,32 110,88 60,116 10,88 10,32"
-        fill="none" stroke="url(#g1)" stroke-width="2" opacity="0.6"/>
-
-      <!-- İç altıgen -->
-      <polygon points="60,18 96,39 96,81 60,102 24,81 24,39"
-        fill="rgba(168,85,247,0.08)" stroke="url(#g1)" stroke-width="1" opacity="0.4"/>
-
-      <!-- M harfi — kalın geometrik -->
-      <g filter="url(#glow)">
-        <!-- Sol dikey -->
-        <rect x="22" y="34" width="11" height="52" rx="2" fill="url(#g1)"/>
-        <!-- Sağ dikey -->
-        <rect x="87" y="34" width="11" height="52" rx="2" fill="url(#g1)"/>
-        <!-- Sol çapraz (inen) -->
-        <polygon points="22,34 33,34 60,68 60,80 48,80" fill="url(#g1)" opacity="0.95"/>
-        <!-- Sağ çapraz (inen) -->
-        <polygon points="98,34 87,34 60,68 60,80 72,80" fill="url(#g1)" opacity="0.95"/>
-        <!-- Orta V nokta -->
-        <circle cx="60" cy="72" r="5" fill="#e0b8ff"/>
-      </g>
-
-      <!-- Parlama noktaları -->
-      <circle cx="22" cy="34" r="3" fill="#fff" opacity="0.8"/>
-      <circle cx="98" cy="34" r="3" fill="#fff" opacity="0.8"/>
-      <circle cx="60" cy="4" r="2" fill="#a855f7" opacity="0.9"/>
-    </svg>
-  </div>
-
-  <div class="logo-line"></div>
-  <div class="logo-text">MIVOG</div>
-  <div class="logo-sub">Game Studio</div>
+<div id="wrapper">
+  <canvas id="brickCanvas"></canvas>
+  <div class="splash-tagline">Game Studio</div>
 </div>
-
-<button class="start-btn" onclick="startGame()">▶ &nbsp; BAŞLA</button>
-<div class="version">v1.0.0</div>
-<div class="transition-out" id="transOut"></div>
+<button id="replayBtn">↺ Tekrar Oynat</button>
 
 <script>
-// Yıldız alanı oluştur
-const sf = document.getElementById('starfield');
-for(let i=0;i<180;i++){
-  const s=document.createElement('div');
-  s.className='star';
-  const size=Math.random()*2.5+0.5;
-  s.style.cssText=`
-    width:${size}px;height:${size}px;
-    left:${Math.random()*100}%;
-    top:${Math.random()*100}%;
-    --a:${Math.random()*0.8+0.1};
-    --d:${(Math.random()*3+1).toFixed(1)}s;
-    animation-delay:${(Math.random()*4).toFixed(1)}s;
-  `;
-  sf.appendChild(s);
+const FONT = {
+  M:[[1,0,0,0,1],[1,1,0,1,1],[1,0,1,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+  I:[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[1,1,1,1,1]],
+  V:[[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,1,0,1,0],[0,0,1,0,0]],
+  O:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+  G:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,0],[1,0,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+};
+const LETTERS = ['M','I','V','O','G'];
+const BRICK=12, GAP=4, STEP=BRICK+GAP, LETTER_GAP=18;
+const wrapper = document.getElementById('wrapper');
+const tagline = document.querySelector('.splash-tagline');
+
+function runSplash(){
+  wrapper.classList.remove('phase2');
+  tagline.style.color = 'rgba(255,120,30,0)';
+
+  const canvas = document.getElementById('brickCanvas');
+  const totalW = LETTERS.length*(5*STEP-GAP)+(LETTERS.length-1)*LETTER_GAP;
+  const totalH = 7*STEP-GAP;
+  const SCALE = window.devicePixelRatio||1;
+  canvas.width = totalW*SCALE;
+  canvas.height = totalH*SCALE;
+  canvas.style.width = totalW+'px';
+  canvas.style.height = totalH+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(SCALE,SCALE);
+
+  const bricks=[];
+  LETTERS.forEach((ch,li)=>{
+    const map=FONT[ch];
+    const offsetX=li*(5*STEP-GAP+LETTER_GAP);
+    for(let row=0;row<7;row++) for(let col=0;col<5;col++){
+      if(!map[row][col]) continue;
+      bricks.push({x:offsetX+col*STEP, y:row*STEP, alpha:0, delay:Math.random()*900+li*80});
+    }
+  });
+
+  function brickColor(x,y,alpha){
+    const t=(x/totalW+y/totalH)/2;
+    const g=Math.round(80+t*55);
+    return `rgba(255,${g},0,${alpha})`;
+  }
+  function drawBrick(b){
+    if(b.alpha<=0) return;
+    const {x,y,alpha:a}=b;
+    ctx.fillStyle=brickColor(x,y,a);
+    ctx.beginPath();ctx.roundRect(x,y,BRICK,BRICK,2);ctx.fill();
+    ctx.fillStyle=`rgba(255,200,100,${a*0.35})`;
+    ctx.fillRect(x+1,y+1,BRICK-2,2);
+    ctx.fillStyle=`rgba(0,0,0,${a*0.3})`;
+    ctx.fillRect(x+1,y+BRICK-2,BRICK-2,1);
+    ctx.strokeStyle=`rgba(120,30,0,${a*0.35})`;
+    ctx.lineWidth=0.5;
+    ctx.strokeRect(x+.5,y+.5,BRICK-1,BRICK-1);
+  }
+
+  let start=null;
+  const BUILD=1400, HOLD=900, FADE=800;
+  function animate(ts){
+    if(!start) start=ts;
+    const e=ts-start;
+    ctx.clearRect(0,0,totalW,totalH);
+    if(e<BUILD+HOLD){
+      bricks.forEach(b=>{
+        const prog=Math.max(0,e-b.delay);
+        b.alpha=Math.min(1,prog/180);
+        drawBrick(b);
+      });
+      if(e>BUILD*0.5) wrapper.classList.add('phase2');
+      requestAnimationFrame(animate);
+    } else {
+      const fe=e-BUILD-HOLD;
+      const fa=Math.max(0,1-fe/FADE);
+      bricks.forEach(b=>{b.alpha=fa;drawBrick(b);});
+      canvas.style.opacity=fa;
+      tagline.style.opacity=fa;
+      if(fa>0) requestAnimationFrame(animate);
+      else { canvas.style.opacity=1; tagline.style.opacity=1; }
+    }
+  }
+  requestAnimationFrame(animate);
 }
 
-// Işın huzmeler
-const rays = document.getElementById('rays');
-for(let i=0;i<16;i++){
-  const r=document.createElement('div');
-  r.className='ray';
-  r.style.transform=`rotate(${i*22.5}deg) translateY(-50%)`;
-  rays.appendChild(r);
-}
-
-// Başlat
-function startGame(){
-  document.getElementById('transOut').classList.add('active');
-  setTimeout(()=>{
-    // Buraya oyun yüklemesi bağlanacak
-    alert('Mivog → Animal Block Blast yükleniyor...');
-  }, 650);
-}
-
-// 5 saniye sonra otomatik geç
-setTimeout(()=>{
-  document.querySelector('.start-btn').style.animation='none';
-  document.querySelector('.start-btn').style.color='rgba(200,160,255,1)';
-}, 3300);
+runSplash();
+document.getElementById('replayBtn').onclick=()=>runSplash();
 </script>
 </body>
 </html>
