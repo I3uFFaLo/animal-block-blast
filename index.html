@@ -2,8 +2,12 @@
 <html lang="tr" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>🐾 Animal Block Blast</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FFF5F9">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;700;900&display=swap');
 :root{
@@ -11,8 +15,8 @@
   --card:#fff;--bg:#FFF5F9;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{touch-action:pan-y;}
-body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-family:'Nunito',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;overflow-x:hidden;padding-bottom:180px;}
+body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+html{height:100%;height:100dvh;}body{background:var(--bg);transition:background 1.2s ease;min-height:100dvh;font-family:'Nunito',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;overflow-x:hidden;padding-bottom:60px;}
 
 /* BG */
 .paw-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
@@ -30,7 +34,7 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 .game-sub{font-size:.62rem;color:#C9A0C5;font-weight:900;letter-spacing:2px;text-transform:uppercase;}
 
 /* TOP BAR */
-.top-bar{position:relative;z-index:2;display:flex;gap:8px;padding:6px 14px;width:100%;max-width:420px;align-items:center;}
+.top-bar{position:relative;z-index:2;display:flex;gap:8px;padding:6px 14px;width:100%;max-width:600px;align-items:center;}
 .currency-pill{background:white;border-radius:50px;padding:5px 12px;display:flex;align-items:center;gap:5px;box-shadow:0 3px 14px var(--shadow);border:1.5px solid rgba(255,143,171,.15);flex:1;justify-content:center;cursor:pointer;transition:all .15s;}
 .currency-pill:hover{transform:scale(1.03);}
 .c-icon{font-size:.95rem;}.c-val{font-family:'Baloo 2',cursive;font-size:1rem;font-weight:800;color:var(--text);}
@@ -39,7 +43,7 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 .icon-btn:hover{transform:scale(1.08);}
 
 /* LEVEL BAR */
-.level-bar{position:relative;z-index:2;width:100%;max-width:420px;padding:0 14px 8px;}
+.level-bar{position:relative;z-index:2;width:100%;max-width:600px;padding:0 14px 8px;}
 .level-card{background:white;border-radius:16px;padding:8px 14px;box-shadow:0 4px 18px var(--shadow);border:1.5px solid rgba(255,143,171,.18);display:flex;align-items:center;gap:8px;}
 .level-icon{font-size:1.3rem;}.level-info{min-width:50px;}
 .level-num{font-family:'Baloo 2',cursive;font-size:.95rem;font-weight:800;color:var(--text);}
@@ -49,8 +53,8 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 .xp-lbl{font-size:.6rem;font-weight:700;color:#C9A0C5;white-space:nowrap;}
 
 /* GAME AREA */
-.game-area{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:11px;padding:0 12px;width:100%;max-width:420px;}
-.board-wrapper{background:white;border-radius:20px;padding:9px;box-shadow:0 8px 36px var(--shadow);border:2px solid rgba(255,143,171,.1);width:100%;}
+.game-area{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 6px;width:100%;max-width:600px;}
+.board-wrapper{background:white;border-radius:16px;padding:7px;box-shadow:0 8px 36px var(--shadow);border:2px solid rgba(255,143,171,.1);width:100%;}
 #board{display:grid;gap:3px;}
 
 /* CELLS */
@@ -73,7 +77,7 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 
 /* PIECE TRAY */
 .piece-tray{background:white;border-radius:16px;padding:9px 12px;box-shadow:0 8px 36px var(--shadow);border:2px solid rgba(255,143,171,.1);display:flex;justify-content:space-around;align-items:center;gap:5px;width:100%;}
-.piece-slot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:72px;cursor:pointer;border-radius:12px;padding:5px 2px;transition:all .16s;border:2px dashed transparent;}
+.piece-slot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:72px;cursor:grab;border-radius:12px;padding:5px 2px;transition:transform .12s,box-shadow .12s;border:2px dashed transparent;}
 .piece-slot.selected{background:#FFF0F8;border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 16px rgba(255,100,130,.2);}
 .piece-slot.used{opacity:.2;pointer-events:none;}
 .piece-grid{display:grid;gap:2px;}
@@ -98,7 +102,7 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 .ab-cooldown{font-size:.5rem;color:#C9A0C5;font-weight:700;margin-top:1px;}
 
 /* SCORE BAR */
-.score-bar{position:relative;z-index:2;display:flex;gap:8px;width:100%;max-width:420px;padding:0 14px 4px;}
+.score-bar{position:relative;z-index:2;display:flex;gap:8px;width:100%;max-width:600px;padding:0 14px 4px;}
 .score-pill{background:white;border-radius:50px;padding:6px 14px;display:flex;align-items:center;gap:6px;box-shadow:0 3px 14px var(--shadow);border:1.5px solid rgba(255,143,171,.12);flex:1;justify-content:center;}
 .s-icon{font-size:.9rem;}.s-val{font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;color:var(--text);}
 .s-lbl{font-size:.5rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#C9A0C5;}
@@ -235,11 +239,9 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 
 /* ── DRAG GHOST ── */
 #dragGhost{
-  position:fixed;
-  pointer-events:none;
-  z-index:500;
-  display:none;
-  transform-origin:top left;
+  position:fixed;z-index:1000;pointer-events:none;display:none;
+  transition:left 0.04s linear, top 0.04s linear;
+  will-change:transform,left,top;
 }
 #dragGhost .piece-grid{gap:2px;}
 #dragGhost .piece-cell{border-radius:6px;box-shadow:0 3px 10px rgba(0,0,0,.18);}
@@ -290,84 +292,29 @@ body{background:var(--bg);transition:background 1.2s ease;min-height:100vh;font-
 /* ── MIVOG SPLASH ── */
 #mivogSplash{
   position:fixed;inset:0;z-index:9999;
-  background:#0a0010;
+  background:#0d0500;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;
-  animation:splashFadeOut 0.4s ease-in 2.2s forwards;
+  gap:14px;
+  opacity:1;
+  transition:opacity 0.9s ease;
 }
-@keyframes splashFadeOut{to{opacity:0;pointer-events:none;}}
-
-.splash-logo-wrap{
-  display:flex;flex-direction:column;align-items:center;
-  animation:splashPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
-}
-@keyframes splashPop{
-  from{opacity:0;transform:scale(0.5);}
-  to{opacity:1;transform:scale(1);}
-}
-
-.splash-icon svg{
-  width:80px;height:80px;
-  filter:drop-shadow(0 0 18px rgba(168,85,247,0.9));
-}
-
-.splash-title{
-  font-family:'Bebas Neue',cursive;
-  font-size:3.2rem;letter-spacing:0.3em;
-  color:#fff;
-  margin-top:-4px;
-  text-shadow:0 0 20px rgba(168,85,247,0.8);
-  animation:splashGlow 0.8s ease-in-out 0.8s infinite alternate;
-}
-@keyframes splashGlow{
-  from{text-shadow:0 0 10px rgba(168,85,247,0.5);}
-  to{text-shadow:0 0 30px rgba(168,85,247,1),0 0 60px rgba(124,58,237,0.6);}
-}
-
-.splash-sub{
+#mivogSplash.fade-out{opacity:0;pointer-events:none;}
+.splash-tagline{
   font-family:'Baloo 2',cursive;
-  font-size:.6rem;letter-spacing:.5em;
-  color:rgba(200,160,255,0.5);
+  font-size:.55rem;letter-spacing:.55em;
+  color:rgba(255,120,30,0);
   text-transform:uppercase;
-  animation:splashPop 0.4s ease-out 0.9s both;
+  transition:color 0.6s ease 0.4s;
 }
-
-.splash-line{
-  width:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,#a855f7,transparent);
-  animation:splashLine 0.5s ease-out 0.7s forwards;
-  box-shadow:0 0 8px #a855f7;
-}
-@keyframes splashLine{to{width:160px;}}
-
+#mivogSplash.phase2 .splash-tagline{color:rgba(255,120,30,0.6);}
+#brickCanvas{image-rendering:pixelated;display:block;}
 </style>
 </head>
 <body>
 <!-- MIVOG SPLASH -->
 <div id="mivogSplash">
-  <div class="splash-logo-wrap">
-    <div class="splash-icon">
-      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="sg1" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#e0b8ff"/>
-            <stop offset="60%" stop-color="#a855f7"/>
-            <stop offset="100%" stop-color="#7c3aed"/>
-          </linearGradient>
-        </defs>
-        <polygon points="60,4 110,32 110,88 60,116 10,88 10,32"
-          fill="none" stroke="url(#sg1)" stroke-width="2" opacity="0.5"/>
-        <rect x="22" y="34" width="11" height="52" rx="2" fill="url(#sg1)"/>
-        <rect x="87" y="34" width="11" height="52" rx="2" fill="url(#sg1)"/>
-        <polygon points="22,34 33,34 60,68 60,80 48,80" fill="url(#sg1)" opacity="0.95"/>
-        <polygon points="98,34 87,34 60,68 60,80 72,80" fill="url(#sg1)" opacity="0.95"/>
-        <circle cx="60" cy="72" r="5" fill="#e0b8ff"/>
-      </svg>
-    </div>
-    <div class="splash-line"></div>
-    <div class="splash-title">MIVOG</div>
-    <div class="splash-sub">Game Studio</div>
-  </div>
+  <canvas id="brickCanvas"></canvas>
+  <div class="splash-tagline">Game Studio</div>
 </div>
 
 
@@ -1091,7 +1038,7 @@ const REFILL_INTERVALS_MS = [
 ];
 
 // abilities[i] = mevcut adet
-let abilities = [3, 1, 6];
+let abilities = [3, 1, 2];  // bomba:3, yıldırım:1, artı:2
 let abilityLastRefresh = Date.now();
 let abilityTimers = [null,null,null];
 
@@ -1156,7 +1103,7 @@ function renderAbilityCountdown(){
   const el = document.getElementById('abNextRefresh');
   if(!el) return;
   const allFull = abilities.every((v,i)=>v>=DAILY_LIMITS[i]);
-  if(allFull){ el.textContent=t('allFull'); return; }
+  if(allFull){ el.textContent=''; return; }
   const nextMs = Math.min(...REFILL_INTERVALS_MS.map((ms,i)=>{
     if(abilities[i]>=DAILY_LIMITS[i]) return Infinity;
     return ms - ((Date.now()-abilityLastRefresh) % ms);
@@ -1318,7 +1265,7 @@ function startSoloGame(){
   document.getElementById('overlay').style.display='none';
   renderBoard(); renderPieces(); renderAbilities();
   const sp={tr:'Hadi oynayalım! 🎯', en:"Let's go! 🎯", de:'Los! 🎯', ja:'いくよ！🎯'};
-  setTimeout(()=>showAnimeChar(sp[currentLang]||sp.tr), 600);
+  if(!localStorage.getItem('abb_soloplay_shown')){localStorage.setItem('abb_soloplay_shown','1');setTimeout(()=>showAnimeChar(sp[currentLang]||sp.tr), 600);}
   showToast('🎯 Solo Mod Başladı! Yüksek skora ulaş!');
 }
 
@@ -1680,13 +1627,14 @@ function renderPieces(){
       }));
       slot.appendChild(g);
 
-      // Click to select (existing behaviour)
-      slot.addEventListener('click',()=>selectPiece(idx));
-
-      // ── DRAG: mouse ──
+      // Mouse: click seç, mousedown sürükle
+      slot.addEventListener('click',()=>{ if(!drag) selectPiece(idx); });
       slot.addEventListener('mousedown', e=>startDrag(e, idx, 'mouse'));
-      // ── DRAG: touch ──
-      slot.addEventListener('touchstart', e=>startDrag(e, idx, 'touch'), {passive:false});
+      // Touch: tek dokunuşta direkt sürükle — seçip tekrar tıklama yok
+      slot.addEventListener('touchstart', e=>{
+        e.preventDefault();
+        startDrag(e, idx, 'touch');
+      }, {passive:false});
     }
     tray.appendChild(slot);
   });
@@ -1734,24 +1682,19 @@ function getBoardRect(){
 
 // Parmak/imleç pozisyonundan hangi hücreye snap etmeli?
 function snapPos(clientX, clientY, piece){
+  // clientY zaten offset uygulanmış olarak gelir — burada tekrar ekleme
   const rect = getBoardRect();
   const cellSize = getCellSize();
   const gap = 3;
   const step = cellSize + gap;
-
-  // Parmağın ~1.5cm (~57px) üstünde göster — kullanıcı nereye koyduğunu görsün
-  const FINGER_OFFSET_Y = 57;
   const relX = clientX - rect.left;
-  const relY = (clientY - FINGER_OFFSET_Y) - rect.top;
-
+  const relY = clientY - rect.top;
   let snapC = Math.round(relX / step);
   let snapR = Math.round(relY / step);
-
   const rows = piece.shape.length;
   const cols = piece.shape[0].length;
   snapC = Math.max(0, Math.min(GRID - cols, snapC));
   snapR = Math.max(0, Math.min(GRID - rows, snapR));
-
   return {r: snapR, c: snapC};
 }
 
@@ -1761,8 +1704,11 @@ function positionGhost(clientX, clientY, piece){
   const step = cellSize + gap;
   const rect = getBoardRect();
 
-  // Ghost'u snap pozisyonuna hizala
-  const {r, c} = snapPos(clientX, clientY, piece);
+  // Block Blast tarzı: parmağın 1.5 hücre (~%150 cellSize) üstünde snap yap
+  const OFFSET_Y = cellSize * 1.6;
+  const {r, c} = snapPos(clientX, clientY - OFFSET_Y, piece);
+
+  // Ghost'u snap hücresinin tam üstüne yerleştir
   const ghostX = rect.left + c * step;
   const ghostY = rect.top + r * step;
 
@@ -1789,24 +1735,85 @@ function positionGhost(clientX, clientY, piece){
 
 function isOverBoard(clientX, clientY){
   const rect = getBoardRect();
+  const cellSize = getCellSize();
+  // Parmağın üstündeki noktayı kontrol et (ghost offset ile tutarlı)
+  const checkY = clientY - cellSize * 1.6;
   return clientX >= rect.left && clientX <= rect.right &&
-         clientY >= rect.top  && clientY <= rect.bottom;
+         checkY >= rect.top  && checkY <= rect.bottom;
+}
+
+function moveGhost(clientX, clientY, piece, type){
+  const cellSize = getCellSize();
+  const ghost = document.getElementById('dragGhost');
+  ghost.style.display = 'block';
+
+  // Parçanın kaç hücre geniş/yüksek olduğunu bul
+  const rows = piece.shape.length;
+  const cols = piece.shape[0].length;
+  const gap = 3;
+  const step = cellSize + gap;
+
+  // Ghost boyutu
+  const ghostW = cols * step - gap;
+  const ghostH = rows * step - gap;
+
+  // OFFSET: ghost parmağın üstünde dursun — parçanın altını parmağa hizala + biraz yukarda
+  const FINGER_UP = cellSize * 0.8; // parmağın biraz üstünde
+  const ghostLeft = clientX - ghostW / 2;  // yatayda ortala
+  const ghostTop  = clientY - ghostH - FINGER_UP; // parmağın üstüne koy
+
+  // Tahta üzerinde miyiz? (offset'li Y ile)
+  const rect = getBoardRect();
+  const checkX = clientX;
+  const checkY = clientY - ghostH / 2 - FINGER_UP;
+
+  if(checkX >= rect.left && checkX <= rect.right && checkY >= rect.top && checkY <= rect.bottom){
+    // Tahtaya snap et
+    const relX = clientX - rect.left;
+    const relY = (clientY - ghostH - FINGER_UP) - rect.top;
+    let snapC = Math.round(relX / step);
+    let snapR = Math.round(relY / step);
+    snapC = Math.max(0, Math.min(GRID - cols, snapC));
+    snapR = Math.max(0, Math.min(GRID - rows, snapR));
+
+    const snapX = rect.left + snapC * step;
+    const snapY = rect.top  + snapR * step;
+    ghost.style.left = snapX + 'px';
+    ghost.style.top  = snapY + 'px';
+
+    const valid = canPlace(piece, snapR, snapC);
+    ghost.className = valid ? 'valid-drag' : 'invalid-drag';
+
+    clearHighlight();
+    const cellEls = document.querySelectorAll('.cell');
+    piece.shape.forEach((row,pr)=>row.forEach((val,pc)=>{
+      if(!val) return;
+      const nr=snapR+pr, nc=snapC+pc;
+      if(nr>=0&&nr<GRID&&nc>=0&&nc<GRID)
+        cellEls[nr*GRID+nc].classList.add(valid?'highlight':'invalid-hl');
+    }));
+
+    if(drag){ drag.lastR=snapR; drag.lastC=snapC; drag.lastValid=valid; }
+  } else {
+    // Tahta dışı — ghost parmağın üstünde serbest
+    ghost.style.left = ghostLeft + 'px';
+    ghost.style.top  = ghostTop  + 'px';
+    ghost.className  = '';
+    clearHighlight();
+    if(drag){ drag.lastValid=false; }
+  }
 }
 
 function startDrag(e, idx, type){
   if(!pieces[idx]) return;
-  if(activeAbility !== null) return; // yetenek modunda sürükleme yok
-
+  if(activeAbility !== null) return;
   if(type==='touch') e.preventDefault();
 
   const piece = pieces[idx];
   const cellSize = getCellSize();
 
-  // Slot'u seçili yap
   selectedPiece = idx;
   renderPieces();
-
-  // Ghost oluştur
   buildGhostContent(piece, cellSize);
 
   const slot = document.getElementById('pieceTray').children[idx];
@@ -1816,37 +1823,17 @@ function startDrag(e, idx, type){
     ? {x: ev.touches[0].clientX, y: ev.touches[0].clientY}
     : {x: ev.clientX, y: ev.clientY};
 
-  const {x:sx, y:sy} = getXY(e);
   drag = {idx, piece, type, lastR:-1, lastC:-1, lastValid:false};
 
-  // İlk pozisyon
-  if(isOverBoard(sx, sy)){
-    const snap = positionGhost(sx, sy, piece);
-    drag.lastR = snap.r; drag.lastC = snap.c; drag.lastValid = snap.valid;
-  } else {
-    const ghost = document.getElementById('dragGhost');
-    ghost.style.left = (sx - cellSize)+'px';
-    ghost.style.top  = (sy - cellSize)+'px';
-    ghost.className = '';
-  }
+  // İlk ghost pozisyonu
+  const {x:sx, y:sy} = getXY(e);
+  moveGhost(sx, sy, piece, type);
 
   const onMove = ev => {
     if(!drag) return;
     if(type==='touch') ev.preventDefault();
     const {x,y} = getXY(ev);
-    if(isOverBoard(x,y)){
-      const snap = positionGhost(x, y, piece);
-      drag.lastR = snap.r; drag.lastC = snap.c; drag.lastValid = snap.valid;
-    } else {
-      // Tahta dışında: ghost parmağı takip etsin, highlight temizle
-      clearHighlight();
-      const ghost = document.getElementById('dragGhost');
-      const cellSize2 = getCellSize();
-      ghost.style.left = (x - cellSize2)+'px';
-      ghost.style.top  = (y - cellSize2)+'px';
-      ghost.className = '';
-      drag.lastValid = false;
-    }
+    moveGhost(x, y, piece, type);
   };
 
   const onEnd = ev => {
@@ -1862,13 +1849,10 @@ function startDrag(e, idx, type){
     if(slot2) slot2.classList.remove('dragging');
 
     if(drag.lastValid && drag.lastR >= 0){
-      // Yerleştir!
       playPlace();
       placePiece(drag.piece, drag.lastR, drag.lastC);
     } else {
-      // Geçersiz — sadece seçili kalsın, titreşim ver
-      if(!drag.lastValid && drag.lastR >= 0) vibrate([30,20,30]);
-      selectedPiece = drag.idx;
+      selectedPiece = null;
       renderPieces();
     }
     drag = null;
@@ -1878,9 +1862,6 @@ function startDrag(e, idx, type){
   document.addEventListener(type==='touch'?'touchend':'mouseup', onEnd);
 }
 
-/* ============================================================
-   INTERACTION
-============================================================ */
 function selectPiece(idx){
   if(!pieces[idx]) return;
   activeAbility=null;selectedPiece=(selectedPiece===idx)?null:idx;
@@ -2353,7 +2334,22 @@ function startGame(){
   document.getElementById('bestEl').textContent=best;
   updateCurrencyUI();
   startLevel();
-  setTimeout(()=>showAnimeChar(speeches[currentLang]||speeches.tr), 700);
+  // İlk oynayışta "Hadi oynayalım", sonra farklı mesajlar
+  const firstPlayKey = 'abb_firstplay_shown';
+  const hadShown = localStorage.getItem(firstPlayKey);
+  if(!hadShown){
+    localStorage.setItem(firstPlayKey,'1');
+    setTimeout(()=>showAnimeChar(speeches[currentLang]||speeches.tr), 700);
+  } else {
+    const altSpeeches = {
+      tr:['Devam et! 💪','Harika gidiyorsun! ⭐','Bugün rekor kırarsın! 🏆','Odaklan! 🎯'],
+      en:['Keep going! 💪','You got this! ⭐','New record today! 🏆','Focus! 🎯'],
+      de:['Weiter! 💪','Super! ⭐','Neuer Rekord! 🏆','Fokus! 🎯'],
+      ja:['続けて！💪','いいね！⭐','記録更新！🏆','集中！🎯'],
+    };
+    const arr = altSpeeches[currentLang]||altSpeeches.tr;
+    setTimeout(()=>showAnimeChar(arr[Math.floor(Math.random()*arr.length)]), 700);
+  }
 }
 
 const speeches={tr:'Hadi oynayalım! 🐾✨', en:"Let's play! 🐾✨", de:'Los geht\'s! 🐾✨', ja:'はじめよう！🐾✨'};
@@ -2524,21 +2520,33 @@ function requestNotifPermission(){
 function scheduleNotif(){
   if(!settings.notifications||notifScheduled) return;
   notifScheduled=true;
-  // Günde 1 kez — 23 saat sonra
+  // 4 saat sonra bildirim — sadece oyun kapalıyken gönder
   setTimeout(()=>{
     notifScheduled=false;
-    showInAppNotif('🐾 Bugünkü görevin seni bekliyor! Gel oyna 🌟');
-  }, 23*60*60*1000);
-  // Kısa demo için 30 saniye sonra da bir tane (test amaçlı)
-  setTimeout(()=>showInAppNotif('🎁 Yeteneklerin yenilendi! Gel oyna 🐾'), 30000);
+    sendBackgroundNotif('🐾 Bugünkü görevin seni bekliyor! Gel oyna 🌟');
+  }, 4*60*60*1000);
+  // 8 saat sonra yetenek bildirimi
+  setTimeout(()=>{
+    sendBackgroundNotif('🎁 Yeteneklerin yenilendi! Seni bekliyoruz 🐾');
+  }, 8*60*60*1000);
+}
+// Sadece oyun arka planda/kapalıyken bildirim gönder
+function sendBackgroundNotif(msg){
+  if(!settings.notifications) return;
+  if(document.visibilityState === 'hidden'){
+    // Oyun kapalı/arka plan → push notification
+    if('Notification'in window&&Notification.permission==='granted'){
+      try{new Notification('🐾 Animal Block Blast!',{body:msg,icon:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>'});}catch(e){}
+    }
+  }
+  // Oyun açıksa hiç gösterme
 }
 function showInAppNotif(msg){
+  // Sadece oyun açıkken in-app banner göster (yetenek bildirimleri vs.)
+  if(document.visibilityState === 'hidden') return;
   const b=document.getElementById('notifBanner');
   document.getElementById('notifText').textContent=msg;
   b.classList.add('show');setTimeout(()=>b.classList.remove('show'),5000);
-  if('Notification'in window&&Notification.permission==='granted'){
-    try{new Notification('🐾 Animal Block Blast!',{body:msg});}catch(e){}
-  }
 }
 function dismissNotif(){document.getElementById('notifBanner').classList.remove('show');}
 
@@ -2564,11 +2572,128 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(b) b.addEventListener('mouseleave',clearHighlight);
   // Kaydedilmiş ilerlemeyi yükle
   const hadSave = loadProgress();
-  // Splash 2.6s sonra tamamen kaldır
-  setTimeout(()=>{
-    const s=document.getElementById('mivogSplash');
-    if(s) s.remove();
-  }, 2650);
+  // ── MIVOG PIKSEL TUĞLA SPLASH ──
+  (function(){
+    const canvas = document.getElementById('brickCanvas');
+    const splash = document.getElementById('mivogSplash');
+    if(!canvas || !splash) return;
+
+    // MIVOG — 5x7 piksel font, her harf 5 geniş 7 yüksek + 1 boşluk
+    const FONT = {
+      M:[[1,0,0,0,1],[1,1,0,1,1],[1,0,1,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+      I:[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[1,1,1,1,1]],
+      V:[[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,1,0,1,0],[0,0,1,0,0]],
+      O:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+      G:[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,0],[1,0,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+    };
+
+    const LETTERS = ['M','I','V','O','G'];
+    const BRICK = 10;   // tuğla boyutu px
+    const GAP   = 3;    // tuğlalar arası boşluk
+    const STEP  = BRICK + GAP;
+    const LETTER_GAP = 14; // harfler arası
+
+    // Canvas boyutunu hesapla
+    const totalW = LETTERS.length * (5*STEP - GAP) + (LETTERS.length-1)*LETTER_GAP;
+    const totalH = 7 * STEP - GAP;
+    const SCALE  = window.devicePixelRatio || 1;
+    canvas.width  = totalW * SCALE;
+    canvas.height = totalH * SCALE;
+    canvas.style.width  = totalW + 'px';
+    canvas.style.height = totalH + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(SCALE, SCALE);
+
+    // Tüm tuğlaları oluştur
+    const bricks = [];
+    LETTERS.forEach((ch, li) => {
+      const map = FONT[ch];
+      const offsetX = li * (5*STEP - GAP + LETTER_GAP);
+      for(let row=0; row<7; row++){
+        for(let col=0; col<5; col++){
+          if(!map[row][col]) continue;
+          bricks.push({
+            x: offsetX + col*STEP,
+            y: row*STEP,
+            alpha: 0,
+            delay: Math.random() * 900 + li * 80, // rastgele belirim
+            fadeDelay: 0, // fade-out için
+          });
+        }
+      }
+    });
+
+    // Renk: mor tuğla gradyanı
+    function brickColor(x, y, alpha){
+      const t = (x/totalW + y/totalH) / 2;
+      // Turuncu/ateş: #FF6B00 → #FF3D00
+      const r = Math.round(255);
+      const g = Math.round(80 + t*55);   // 80→135
+      const b = Math.round(0);
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function drawBrick(b){
+      if(b.alpha <= 0) return;
+      const x=b.x, y=b.y, s=BRICK, a=b.alpha;
+      // Tuğla gövdesi
+      ctx.fillStyle = brickColor(x,y,a);
+      ctx.beginPath();
+      ctx.roundRect(x, y, s, s, 2);
+      ctx.fill();
+      // Üst parlama
+      ctx.fillStyle = `rgba(255,200,100,${a*0.35})`;
+      ctx.fillRect(x+1, y+1, s-2, 2);
+      // Alt gölge
+      ctx.fillStyle = `rgba(0,0,0,${a*0.3})`;
+      ctx.fillRect(x+1, y+s-2, s-2, 1);
+      // İç çizgi (tuğla izi)
+      ctx.strokeStyle = `rgba(120,30,0,${a*0.35})`;
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(x+0.5, y+0.5, s-1, s-1);
+    }
+
+    let start = null;
+    const BUILD_DUR  = 1400; // tuğlalar belirir
+    const HOLD_DUR   = 900;  // bekler
+    const FADE_DUR   = 800;  // solar
+
+    function animate(ts){
+      if(!start) start = ts;
+      const elapsed = ts - start;
+      ctx.clearRect(0,0,totalW,totalH);
+
+      if(elapsed < BUILD_DUR + HOLD_DUR){
+        // Build phase
+        bricks.forEach(b=>{
+          const prog = Math.max(0, elapsed - b.delay);
+          b.alpha = Math.min(1, prog / 180);
+          drawBrick(b);
+        });
+        if(elapsed > BUILD_DUR * 0.5){
+          splash.classList.add('phase2'); // tagline belirir
+        }
+        requestAnimationFrame(animate);
+      } else {
+        // Fade out phase
+        const fadeElapsed = elapsed - BUILD_DUR - HOLD_DUR;
+        const fadeAlpha = Math.max(0, 1 - fadeElapsed/FADE_DUR);
+        bricks.forEach(b=>{
+          b.alpha = fadeAlpha;
+          drawBrick(b);
+        });
+        splash.style.opacity = fadeAlpha;
+        if(fadeAlpha > 0){
+          requestAnimationFrame(animate);
+        } else {
+          splash.remove();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  })();
   selectMode('level');
   initBoard();generatePieces();renderBoard();renderPieces();if(gameMode==='solo')renderAbilities();
   updateLevelUI();updateCurrencyUI();
