@@ -61,9 +61,25 @@ html{height:100%;height:100dvh;}body{background:var(--bg);transition:background 
 .cell{aspect-ratio:1;border-radius:8px;background:#FFF0F5;border:1.5px solid rgba(255,143,171,.08);display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:background .1s,transform .1s,box-shadow .1s;cursor:pointer;user-select:none;}
 .cell.filled{box-shadow:0 2px 6px rgba(0,0,0,.1);border-color:transparent;}
 .cell.highlight{transform:scale(1.07);box-shadow:0 0 0 2.5px rgba(255,143,171,.5);z-index:5;}
-.cell.hl-bomb{background:#FFE0B0!important;box-shadow:0 0 0 2.5px rgba(255,140,50,.6)!important;}
-.cell.hl-lightning{background:#EDE0FF!important;box-shadow:0 0 0 2px rgba(180,100,255,.5)!important;}
-.cell.hl-cross{background:#C8F0FF!important;box-shadow:0 0 0 2.5px rgba(60,180,255,.6)!important;}
+.cell.hl-bomb{
+  background:#FFCC80!important;
+  box-shadow:0 0 0 3px rgba(255,120,0,.7),0 0 12px rgba(255,120,0,.4)!important;
+  animation:abPulse .4s ease infinite alternate;
+}
+.cell.hl-lightning{
+  background:#E1BEF0!important;
+  box-shadow:0 0 0 3px rgba(150,50,255,.7),0 0 12px rgba(150,50,255,.4)!important;
+  animation:abPulse .4s ease infinite alternate;
+}
+.cell.hl-cross{
+  background:#B3E5FC!important;
+  box-shadow:0 0 0 3px rgba(0,160,255,.7),0 0 12px rgba(0,160,255,.4)!important;
+  animation:abPulse .4s ease infinite alternate;
+}
+@keyframes abPulse{
+  from{filter:brightness(1);}
+  to{filter:brightness(1.15);}
+}
 .cell.invalid-hl{background:#FFE0E8!important;transform:scale(.95)!important;}
 .cell.clearing{animation:cellPop .32s ease forwards;}
 .cell.shake{animation:cellShake .25s ease;}
@@ -240,8 +256,8 @@ html{height:100%;height:100dvh;}body{background:var(--bg);transition:background 
 /* ── DRAG GHOST ── */
 #dragGhost{
   position:fixed;z-index:1000;pointer-events:none;display:none;
-  transition:left 0.04s linear, top 0.04s linear;
-  will-change:transform,left,top;
+  will-change:left,top;
+  transform:translateZ(0);
 }
 #dragGhost .piece-grid{gap:2px;}
 #dragGhost .piece-cell{border-radius:6px;box-shadow:0 3px 10px rgba(0,0,0,.18);}
@@ -375,19 +391,19 @@ html{height:100%;height:100dvh;}body{background:var(--bg);transition:background 
       <div class="ab-timer-global" id="abNextRefresh"></div>
     </div>
     <div class="ab-row">
-      <div class="ab-btn disabled" id="abBtn0" onclick="selectAbilityBtn(0)">
+      <div class="ab-btn disabled" id="abBtn0" onclick="selectAbilityBtn(0)" ontouchstart="event.preventDefault();selectAbilityBtn(0)">
         <div class="ab-count" id="abCount0">0</div>
         <div class="ab-emoji">💣</div>
         <div class="ab-name" data-i18n="bomb">Bomba</div>
         <div class="ab-sub">2×2 alan patlatır</div>
       </div>
-      <div class="ab-btn disabled" id="abBtn1" onclick="selectAbilityBtn(1)">
+      <div class="ab-btn disabled" id="abBtn1" onclick="selectAbilityBtn(1)" ontouchstart="event.preventDefault();selectAbilityBtn(1)">
         <div class="ab-count" id="abCount1">0</div>
         <div class="ab-emoji">⚡</div>
         <div class="ab-name" data-i18n="lightning">Yıldırım</div>
         <div class="ab-sub">Tüm tahtayı yok eder!</div>
       </div>
-      <div class="ab-btn disabled" id="abBtn2" onclick="selectAbilityBtn(2)">
+      <div class="ab-btn disabled" id="abBtn2" onclick="selectAbilityBtn(2)" ontouchstart="event.preventDefault();selectAbilityBtn(2)">
         <div class="ab-count" id="abCount2">0</div>
         <div class="ab-emoji">✚</div>
         <div class="ab-name" data-i18n="cross">Artı</div>
@@ -1577,14 +1593,29 @@ function renderBoardImmediate(){
     el.appendChild(cell);
   }
 
-  // Board üzerinde touch move — seçili parçayı parmak 1.5cm üstünde göster
-  el.addEventListener('touchmove', e=>{
-    if(drag) return; // sürükleme modunda bu listener çalışmasın
-    if(selectedPiece===null) return;
+  // Board touch — ilk dokunuşta anında yetenek önizleme
+  el.addEventListener('touchstart', e=>{
+    if(drag) return;
+    if(activeAbility === null && selectedPiece === null) return;
     e.preventDefault();
     const t=e.touches[0];
-    const OFFSET_Y=57; // ~1.5cm
-    const target=document.elementFromPoint(t.clientX, t.clientY - OFFSET_Y);
+    const OFFSET_Y = getCellSize() * 1.4;
+    const checkY = activeAbility!==null ? t.clientY : t.clientY - OFFSET_Y;
+    const target=document.elementFromPoint(t.clientX, checkY);
+    if(target && target.dataset.r!==undefined){
+      const tr=parseInt(target.dataset.r), tc=parseInt(target.dataset.c);
+      onCellHover(tr, tc);
+    }
+  },{passive:false});
+
+  // Board touch — hem parça yerleştirme hem yetenek önizleme/kullanma
+  el.addEventListener('touchmove', e=>{
+    if(drag) return;
+    e.preventDefault();
+    const t=e.touches[0];
+    const OFFSET_Y = getCellSize() * 1.4;
+    const checkY = activeAbility!==null ? t.clientY : t.clientY - OFFSET_Y;
+    const target=document.elementFromPoint(t.clientX, checkY);
     if(target && target.dataset.r!==undefined){
       const tr=parseInt(target.dataset.r), tc=parseInt(target.dataset.c);
       onCellHover(tr, tc);
@@ -1593,11 +1624,11 @@ function renderBoardImmediate(){
 
   el.addEventListener('touchend', e=>{
     if(drag) return;
-    if(selectedPiece===null) return;
     e.preventDefault();
     const t=e.changedTouches[0];
-    const OFFSET_Y=57;
-    const target=document.elementFromPoint(t.clientX, t.clientY - OFFSET_Y);
+    const OFFSET_Y = getCellSize() * 1.4;
+    const checkY = activeAbility!==null ? t.clientY : t.clientY - OFFSET_Y;
+    const target=document.elementFromPoint(t.clientX, checkY);
     if(target && target.dataset.r!==undefined){
       const tr=parseInt(target.dataset.r), tc=parseInt(target.dataset.c);
       onCellClick(tr, tc);
@@ -1611,6 +1642,7 @@ function renderPieces(){
   pieces.forEach((piece,idx)=>{
     const slot=document.createElement('div');
     slot.className='piece-slot'+(piece===null?' used':'')+(selectedPiece===idx?' selected':'');
+    slot.dataset.pieceIdx = idx;
     if(piece){
       const g=document.createElement('div');g.className='piece-grid';
       g.style.gridTemplateColumns=`repeat(${piece.shape[0].length},1fr)`;
@@ -1628,13 +1660,10 @@ function renderPieces(){
       slot.appendChild(g);
 
       // Mouse: click seç, mousedown sürükle
-      slot.addEventListener('click',()=>{ if(!drag) selectPiece(idx); });
+
       slot.addEventListener('mousedown', e=>startDrag(e, idx, 'mouse'));
       // Touch: tek dokunuşta direkt sürükle — seçip tekrar tıklama yok
-      slot.addEventListener('touchstart', e=>{
-        e.preventDefault();
-        startDrag(e, idx, 'touch');
-      }, {passive:false});
+
     }
     tray.appendChild(slot);
   });
@@ -1813,7 +1842,12 @@ function startDrag(e, idx, type){
   const cellSize = getCellSize();
 
   selectedPiece = idx;
-  renderPieces();
+  // renderPieces() çağırma — DOM yeniden oluşturma touch event'leri bozuyor
+  // Sadece seçili görünümü güncelle
+  const tray = document.getElementById('pieceTray');
+  Array.from(tray.children).forEach((s,i)=>{
+    s.classList.toggle('selected', i===idx);
+  });
   buildGhostContent(piece, cellSize);
 
   const slot = document.getElementById('pieceTray').children[idx];
@@ -2695,6 +2729,41 @@ document.addEventListener('DOMContentLoaded',()=>{
     requestAnimationFrame(animate);
   })();
   selectMode('level');
+
+  // ── GLOBAL TOUCH HANDLER — parça tepsisi için tek dokunuşta sürükleme ──
+  (function initTouchDrag(){
+    const tray = document.getElementById('pieceTray');
+    if(!tray) return;
+
+    let touchDragStarted = false;
+
+    // Click: parça seç (mouse/masaüstü)
+    tray.addEventListener('click', e => {
+      if(drag) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if(!el) return;
+      const slot = el.closest('[data-piece-idx]');
+      if(!slot) return;
+      const idx = parseInt(slot.dataset.pieceIdx);
+      if(!isNaN(idx) && pieces[idx]) selectPiece(idx);
+    });
+
+    tray.addEventListener('touchstart', e => {
+      if(activeAbility !== null) return;
+      // Hangi slot'a dokunuldu?
+      const touch = e.touches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      if(!el) return;
+      const slot = el.closest('[data-piece-idx]');
+      if(!slot) return;
+      const idx = parseInt(slot.dataset.pieceIdx);
+      if(isNaN(idx) || !pieces[idx]) return;
+
+      e.preventDefault();
+      touchDragStarted = true;
+      startDrag(e, idx, 'touch');
+    }, {passive: false});
+  })();
   initBoard();generatePieces();renderBoard();renderPieces();if(gameMode==='solo')renderAbilities();
   updateLevelUI();updateCurrencyUI();
   // Kayıt varsa bildir
@@ -2708,3 +2777,5 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
+    
