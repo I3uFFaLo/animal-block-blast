@@ -1842,45 +1842,53 @@ function startDrag(e, idx, type){
   const cellSize = getCellSize();
 
   selectedPiece = idx;
-  // renderPieces() çağırma — DOM yeniden oluşturma touch event'leri bozuyor
-  // Sadece seçili görünümü güncelle
   const tray = document.getElementById('pieceTray');
   Array.from(tray.children).forEach((s,i)=>{
     s.classList.toggle('selected', i===idx);
+    s.classList.remove('dragging');
   });
   buildGhostContent(piece, cellSize);
-
-  const slot = document.getElementById('pieceTray').children[idx];
+  const slot = tray.children[idx];
   if(slot) slot.classList.add('dragging');
-
-  const getXY = ev => type==='touch'
-    ? {x: ev.touches[0].clientX, y: ev.touches[0].clientY}
-    : {x: ev.clientX, y: ev.clientY};
 
   drag = {idx, piece, type, lastR:-1, lastC:-1, lastValid:false};
 
-  // İlk ghost pozisyonu
-  const {x:sx, y:sy} = getXY(e);
-  moveGhost(sx, sy, piece, type);
+  // İlk pozisyon
+  if(type==='touch'){
+    const t = e.touches[0];
+    moveGhost(t.clientX, t.clientY, piece);
+  } else {
+    moveGhost(e.clientX, e.clientY, piece);
+  }
 
-  const onMove = ev => {
+  function onMove(ev){
     if(!drag) return;
-    if(type==='touch') ev.preventDefault();
-    const {x,y} = getXY(ev);
-    moveGhost(x, y, piece, type);
-  };
+    ev.preventDefault();
+    if(type==='touch'){
+      const t = ev.touches[0];
+      if(t) moveGhost(t.clientX, t.clientY, piece);
+    } else {
+      moveGhost(ev.clientX, ev.clientY, piece);
+    }
+  }
 
-  const onEnd = ev => {
+  function onEnd(ev){
     if(!drag) return;
-    document.removeEventListener(type==='touch'?'touchmove':'mousemove', onMove);
-    document.removeEventListener(type==='touch'?'touchend':'mouseup', onEnd);
+    if(type==='touch'){
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+      document.removeEventListener('touchcancel', onEnd);
+    } else {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onEnd);
+    }
 
     const ghost = document.getElementById('dragGhost');
     ghost.style.display = 'none';
     clearHighlight();
 
     const slot2 = document.getElementById('pieceTray').children[drag.idx];
-    if(slot2) slot2.classList.remove('dragging');
+    if(slot2){ slot2.classList.remove('dragging'); slot2.classList.remove('selected'); }
 
     if(drag.lastValid && drag.lastR >= 0){
       playPlace();
@@ -1890,10 +1898,16 @@ function startDrag(e, idx, type){
       renderPieces();
     }
     drag = null;
-  };
+  }
 
-  document.addEventListener(type==='touch'?'touchmove':'mousemove', onMove, {passive:false});
-  document.addEventListener(type==='touch'?'touchend':'mouseup', onEnd);
+  if(type==='touch'){
+    document.addEventListener('touchmove', onMove, {passive:false});
+    document.addEventListener('touchend', onEnd, {passive:false});
+    document.addEventListener('touchcancel', onEnd, {passive:false});
+  } else {
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+  }
 }
 
 function selectPiece(idx){
@@ -2777,5 +2791,3 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
-
-    
